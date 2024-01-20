@@ -2,11 +2,12 @@
 
 /* Global Styles */
 :root {
-  --primary-color: #dc3545;
+  --primary-color: white;
   --dark-color: #333333;
   --light-color: #f4f4f4;
   --danger-color: #dc3545;
   --success-color: #28a745;
+  --secondary-color: #ff8500;
 }
 
 * {
@@ -19,7 +20,7 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #fff;
+  background-color: #000b35;
   color: #333;
 }
 
@@ -250,6 +251,14 @@ img {
 .badge-primary,
 .alert-primary {
   background: var(--primary-color);
+  color: #fff;
+}
+
+.btn-secondary,
+.bg-secondary,
+.badge-secondary,
+.alert-secondary {
+  background: var(--secondary-color);
   color: #fff;
 }
 
