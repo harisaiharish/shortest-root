@@ -20,9 +20,7 @@ export class App extends Component {
       <BrowserRouter>
         <div>
           <Routes>
-            <Route exact path='/' element={() => (
-              <Home />
-            )} />
+            <Route exact path='/' element={<Home />}/>
             <Route exact path='/login' element={
               <Login res={this.state.users}/>}/>
             <Route exact path='/users/:user' element={<User />}/>
