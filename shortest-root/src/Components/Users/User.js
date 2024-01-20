@@ -6,7 +6,6 @@ const User = () => {
 
     const {state} = useLocation()
     const navigate = useNavigate()
-    console.log(state.User.currentEvents)
 
     return (
         <div style={{ backgroundColor: "#000b35" }}>

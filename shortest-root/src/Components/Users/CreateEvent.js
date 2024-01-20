@@ -33,15 +33,24 @@ const CreateEvent = () => {
   const navigate = useNavigate()
 
   const uploadData = () => {
-    // upload all data onto firebase
-    navigate(`/users/${state.User.username}/events/${name}`, {state: {
-      address: address,
-      name: name,
-      number: number,
-      type: type,
-      transport: transport
-    }})
-  }
+    navigate(`/users/${state.User.username}/events/${name}`, {
+      state: {
+        eventDetails: {
+          userNames: [state.User.username],
+          address: [address],
+          name: name,
+          number: number,
+          type: type,
+          eventMaster: state.User.username,
+          transport: [transport]
+        },
+        userDetails: {
+          username: state.User.username
+        }
+      }
+    });
+  };
+  
 
 
   return (
