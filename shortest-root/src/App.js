@@ -1,9 +1,10 @@
 
 import './App.css';
-import {Route, Switch, BrowserRouter} from 'react-router-dom';
-import Home from './Pages/Home.js';
+import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import Home from './Components/Home.js';
 import {React, Component} from 'react';
-import Login from './Pages/Login.js';
+import Login from './Components/Login.js';
+import User from './Components/User.js';
 
 export class App extends Component {
 
@@ -18,14 +19,14 @@ export class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <Switch>
-            <Route exact path='/' component={() => (
+          <Routes>
+            <Route exact path='/' element={() => (
               <Home />
             )} />
-            <Route exact path='/login' component={() => (
-              <Login res={this.state.users}/>
-            )}/>
-          </Switch>
+            <Route exact path='/login' element={
+              <Login res={this.state.users}/>}/>
+            <Route exact path='/users/:user' element={<User />}/>
+          </Routes>
         </div>
       </BrowserRouter>
     );

@@ -1,11 +1,14 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 
-const Login = (props) => {
+const Login = ({res}) => {
+    const navigate = useNavigate()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [UserError, setUserError] = useState("")
     const [passwordError, setPasswordError] = useState("")
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState({username: 'aditya'})
+
 
     const buttonClick = () => {
         setUserError("")
@@ -15,11 +18,14 @@ const Login = (props) => {
             setUserError("Enter username")
             return
         } else {
-            
+            res.forEach((element) => {
+                if (element.username === username) {
+                    setUser(element)
+                    console.log(user)
+                }
+            });
+            navigate(`/users/${user.username}`, {user: user})
         }
-
-
-
     }
 
 
