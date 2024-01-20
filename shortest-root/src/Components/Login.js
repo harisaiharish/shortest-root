@@ -7,25 +7,14 @@ const Login = ({res}) => {
     const [password, setPassword] = useState("")
     const [UserError, setUserError] = useState("")
     const [passwordError, setPasswordError] = useState("")
-    const [user, setUser] = useState({username: 'aditya'})
+    const [user, setUser] = useState({
+        username: "aditya",
+        currentEvents: ["e1", "e2"]
+    })
 
 
     const buttonClick = () => {
-        setUserError("")
-        setPasswordError("")
-
-        if (username === "") {
-            setUserError("Enter username")
-            return
-        } else {
-            res.forEach((element) => {
-                if (element.username === username) {
-                    setUser(element)
-                    console.log(user)
-                }
-            });
-            navigate(`/users/${user.username}`, {user: user})
-        }
+        navigate(`/users/${user.username}`, {state: {User: user}})
     }
 
 

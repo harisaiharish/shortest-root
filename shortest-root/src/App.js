@@ -10,9 +10,11 @@ export class App extends Component {
 
   state = {
     users: [{
-    username: "aditya"
+    username: "aditya",
+    currentEvents: ["e1", "e2"]
   },{
-    username: "vivin"
+    username: "vivin",
+    currentEvents: []
   }]}
 
   render() {

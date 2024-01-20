@@ -1,10 +1,14 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 
-const User = ({user}) => {
+const User = () => {
+
+    const {state} = useLocation()
+
   return (
     <div>
         <button onClick={() => {
-            console.log(user)
+            console.log(state.User)
         }}>click</button>
     </div>
   )
