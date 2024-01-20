@@ -15,17 +15,36 @@ function getPlaceDetails(placeId) {
   }
   service = new google.maps.places.PlacesService(map);
   service.nearbySearch({
-    location: { lat: 37.7749, lng: -122.4194 }, // Example coordinates
+    location, // Example coordinates
     radius: 500, // Search radius in meters
-    type: ['restaurant'] // Optional type filter
+    type// Optional type filter
+
   }, (results, status) => {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       for (const result of results) {
         const placeId = result.place_id;
-        console.log(placeId);ne
+        console.log(placeId);
+        return placeId
         // Use the Place ID as needed
       }
     }
   });
+
+  //This code will get a lat and lng from a human address. How do I pass it to nearbySearch is what idk.
+  location = {}
+  const geocoder = new google.maps.Geocoder();
+  var address=promt("Input the address of the place : ")
+  geocoder.geocode({ address }, (results, status) => {
+    if (status === google.maps.GeocoderStatus.OK) {
+      const coordinates = results[0].geometry.location;
+      location = {lat: coordinates.lat(), lng: coordinates.lng()}; //You pass this as the location for nearbysearch
+      //console.log(coordinates.lat(), coordinates.lng());
+    }
+  });
+  var TypeOfPlace=prompt("Enter the type of place : ")
+  placeId=service.nearbySearch(location, radius, TypeOfPlace);
+  reviews=getPlaceDetails(placeId)
+  console.log(reviews)
+ 
 
   
