@@ -9,7 +9,20 @@ const Login = ({res}) => {
     const [passwordError, setPasswordError] = useState("")
     const [user, setUser] = useState({
         username: "aditya",
-        currentEvents: ["e1", "e2"]
+        currentEvents: [{
+            eventName: "Eating food",
+            numPeople: 3,
+        }, {
+            eventName: "Watching movie",
+            numPeople: 10
+        }],
+        comingEvents: [{
+            eventName: "Date with girlfriend",
+            numPeople: 2,
+        }, {
+            eventName: "Band practice",
+            numPeople: 5
+        }],
     })
 
 
