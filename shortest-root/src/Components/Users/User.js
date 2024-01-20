@@ -14,7 +14,7 @@ const User = () => {
             className='button bg-secondary all-center'
             style={{ padding: "5px 5px", maxWidth: "500px" }}
             onClick={() => {
-              navigate(`/users/${state.User.username}/create-event`);
+              navigate(`/users/${state.User.username}/events/create-event`, {state: {User: state.User}});
             }}
           >
             Create Event
