@@ -1,0 +1,12 @@
+{
+  "rules": {
+    ".read": "auth != null",
+    ".write": "auth != null",
+    "locations": {
+      ".indexOn": ["timestamp"],
+      "$uid": {
+        ".validate": "newData.child('latitude').isNumber() && newData.child('longitude').isNumber()"
+      }
+    }
+  }
+}

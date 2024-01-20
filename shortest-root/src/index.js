@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { initializeApp } from 'firebase/app';
+import { app } from './firebase';
+import { database } from './firebase';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,8 +19,11 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-const firebaseConfig = {
-  // Your Firebase config here
-};
+// src/index.js
 
-const firebaseApp = initializeApp(firebaseConfig);
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById('root')
+);
