@@ -26,6 +26,10 @@ const Maps = () => {
             lng: 45.67
         },
         {
+            lat: 38.89,
+            lng: 45.67
+        },
+        {
             lat: 35.89,
             lng: 45.67
         },
@@ -46,8 +50,16 @@ const Maps = () => {
         setAvgLng(sumLng/(arr.length))
         setShow(true)
     }
-
-    return (
+    const customMarkerIcon = {
+        path: 'M22-48h-44v43h16l6 5 6-5h16z',
+        fillColor: '#03a100', // Customize the fill color
+        fillOpacity: 1,
+        //scale: 1,
+        //strokeColor: 'black',
+        //strokeWeight: 2,
+        anchor: new window.google.maps.Point(22, 0),
+      };
+      return (
 
         <div>
             <button onClick={avgLocation} style={{width: "100px", height: "20px"}}></button>
@@ -56,7 +68,10 @@ const Maps = () => {
                     <Marker position={{lat: element.lat, lng: element.lng}}/>
                 ))}
                 {showAvg && (
-                    <Marker position={{lat: avgLat, lng: avgLng}}/>
+                    <Marker 
+                        position={{lat: avgLat, lng: avgLng}}
+                        icon ={customMarkerIcon}
+                    />
                 )}
             </GoogleMap>
         </div>
