@@ -7,12 +7,9 @@ import Login from './Components/Login.js';
 import User from './Components/Users/User.js';
 import CreateEvent from './Components/Users/CreateEvent.js'
 import Event from './Components/Users/Events/Event.js';
-
-
+import Map from './Pages/Maps.js'
 
 export class App extends Component {
-
-
   render() {
     return (
       <BrowserRouter>
@@ -23,6 +20,7 @@ export class App extends Component {
             <Route exact path='/users/:user' element={<User />}/>
             <Route exact path='/users/:user/events/create-event' element={<CreateEvent />}/>
             <Route exact path='/users/:user/events/:eventName' element={<Event />}/>
+            <Route exact path="/map" element={<Map />}/>
           </Routes>
         </div>
       </BrowserRouter>
