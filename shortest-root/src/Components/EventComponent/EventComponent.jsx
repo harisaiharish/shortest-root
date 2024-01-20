@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { database } from '../../firebase';
+import React, { useState, useEffect } from 'react';
+import { auth, database } from '../../firebase';
+import { onAuthStateChanged, getAuth } from 'firebase/auth';
 
 const EventComponent = () => {
   const [eventData, setEventData] = useState({
@@ -8,6 +9,21 @@ const EventComponent = () => {
     eventHead: '',
     participants: {},
   });
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const createEvent = async () => {
     try {
@@ -43,6 +59,8 @@ const EventComponent = () => {
 
   return (
     <div>
+      {user && <p>Welcome, {user.displayName || user.email}!</p>}
+
       <button onClick={createEvent}>Create Event</button>
       <button onClick={() => addParticipant('eventId123', 'userId456')}>Add Participant</button>
       <button onClick={() => getEventInformation('eventId123')}>Get Event Information</button>
