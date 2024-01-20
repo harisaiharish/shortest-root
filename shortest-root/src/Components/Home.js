@@ -1,5 +1,6 @@
 
 import React from "react"
+import { Link } from "react-router-dom"
 
 const Home = (props) => {
     const { loggedIn, email } = props
@@ -16,14 +17,9 @@ const Home = (props) => {
             This is the home page.
         </div>
         <div className={"buttonContainer"}>
-            <input
-                className={"inputButton"}
-                type="button"
-                onClick={onButtonClick}
-                value={loggedIn ? "Log out" : "Log in"} />
-            {(loggedIn ? <div>
-                Your email address is {email}
-            </div> : <div/>)}
+            <a href="/login">
+                <button className="button" >Login</button>
+            </a>
         </div>
 
 
