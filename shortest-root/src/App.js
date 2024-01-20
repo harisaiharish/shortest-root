@@ -1,7 +1,7 @@
 
 import './App.css';
 import {Route, Routes, BrowserRouter} from 'react-router-dom';
-import Map from './Pages/Map.js';
+import Map from './Pages/Maps'
 import {React, Component} from 'react';
 
 export class App extends Component {
