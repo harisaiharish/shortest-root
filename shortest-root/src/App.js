@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css';
+import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import Home from './Components/Home.js';
+import {React, Component} from 'react';
+import Login from './Components/Login.js';
+import User from './Components/Users/User.js';
+import CreateEvent from './Components/Users/CreateEvent.js'
+import Event from './Components/Users/Events/Event.js';
+
+
+
+export class App extends Component {
+
+
+  render() {
+    return (
+      <BrowserRouter>
+        <div>
+          <Routes>
+            <Route exact path='/' element={<Home />}/>
+            <Route exact path='/login' element={<Login/>}/>
+            <Route exact path='/users/:user' element={<User />}/>
+            <Route exact path='/users/:user/events/create-event' element={<CreateEvent />}/>
+            <Route exact path='/users/:user/events/:eventName' element={<Event />}/>
+          </Routes>
+        </div>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
