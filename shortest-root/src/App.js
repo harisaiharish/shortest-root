@@ -1,24 +1,28 @@
 
 import './App.css';
-import {Route, Routes, BrowserRouter} from 'react-router-dom';
-import Map from './Pages/Maps'
+import {Route, BrowserRouter, Routes} from 'react-router-dom';
+import Home from './Components/Home.js';
 import {React, Component} from 'react';
+import Login from './Components/Login.js';
+import User from './Components/Users/User.js';
+import CreateEvent from './Components/Users/CreateEvent.js'
+import Event from './Components/Users/Events/Event.js';
+import Map from './Pages/Maps.js'
 
 export class App extends Component {
-
-  state = {
-    users: [{
-    username: "aditya"
-  },{
-    username: "vivin"
-  }]}
-
   render() {
     return (
       <BrowserRouter>
+        <div>
           <Routes>
-          <Route path="/" element={<Map />}></Route>
+            <Route exact path='/' element={<Home />}/>
+            <Route exact path='/login' element={<Login/>}/>
+            <Route exact path='/users/:user' element={<User />}/>
+            <Route exact path='/users/:user/events/create-event' element={<CreateEvent />}/>
+            <Route exact path='/users/:user/events/:eventName' element={<Event />}/>
+            <Route exact path="/map" element={<Map />}/>
           </Routes>
+        </div>
       </BrowserRouter>
     );
   }
