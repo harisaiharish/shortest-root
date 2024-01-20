@@ -19,8 +19,12 @@ function App() {
           Learn React
         </a>
       </header>
+
+      <EventComponent />
+      {/* NOT WORKING ADI HOW TO REACT */}
     </div>
   );
-}
+};
+
 
 export default App;

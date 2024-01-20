@@ -1,15 +1,11 @@
+// src/Components/EventComponent/EventComponent.jsx
+
 import React, { useState, useEffect } from 'react';
 import { auth, database } from '../../firebase';
 import { onAuthStateChanged, getAuth } from 'firebase/auth';
+import { push, ref, set } from 'firebase/database';
 
 const EventComponent = () => {
-  const [eventData, setEventData] = useState({
-    centerPoint: { latitude: 0, longitude: 0 },
-    typeOfEvent: '',
-    eventHead: '',
-    participants: {},
-  });
-
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -22,48 +18,61 @@ const EventComponent = () => {
       }
     });
 
+    // Clean up the subscription when the component unmounts
     return () => unsubscribe();
   }, []);
 
+  const createParticipants = async () => {
+    try {
+      // Assuming this is triggered when you want to create participants
+      await set(ref(database, 'users/user12'), {
+        location: { latitude: 0, longitude: 0 },
+        travel_type: 'Car',
+      });
+
+      await set(ref(database, 'users/user15'), {
+        location: { latitude: 0, longitude: 0 },
+        travel_type: 'Bus',
+      });
+
+      await set(ref(database, 'users/user19'), {
+        location: { latitude: 0, longitude: 0 },
+        travel_type: 'Bicycle',
+      });
+
+      console.log('Participants created successfully.');
+    } catch (error) {
+      console.error('Error creating participants: ', error);
+    }
+  };
+
   const createEvent = async () => {
     try {
-      const eventRef = await push(ref(database, 'events'), eventData);
-      console.log('Event created with ID: ', eventRef.key);
+      // Assuming this is triggered when you want to create an event
+      const eventKey = push(ref(database, 'events')).key;
+
+      await set(ref(database, `events/${eventKey}`), {
+        centerPoint: { latitude: 12, longitude: 23 },
+        typeOfEvent: 'Restaurant',
+        eventHead: 'user15', // Assuming 'user15' is the UID of the user
+        participants: {
+          user12: true,
+        },
+      });
+
+      console.log('Event created successfully.');
     } catch (error) {
       console.error('Error creating event: ', error);
     }
   };
 
-  const addParticipant = async (eventId, userId) => {
-    try {
-      await set(ref(database, `events/${eventId}/participants/${userId}`), true);
-      console.log('Participant added successfully.');
-    } catch (error) {
-      console.error('Error adding participant: ', error);
-    }
-  };
-
-  const getEventInformation = async (eventId) => {
-    try {
-      const eventSnapshot = await get(ref(database, `events/${eventId}`));
-      if (exists(eventSnapshot.val())) {
-        const eventData = eventSnapshot.val();
-        console.log('Event Information: ', eventData);
-      } else {
-        console.log('Event not found.');
-      }
-    } catch (error) {
-      console.error('Error getting event information: ', error);
-    }
-  };
-
   return (
     <div>
+      {/* Display user information */}
       {user && <p>Welcome, {user.displayName || user.email}!</p>}
 
+      <button onClick={createParticipants}>Create Participants</button>
       <button onClick={createEvent}>Create Event</button>
-      <button onClick={() => addParticipant('eventId123', 'userId456')}>Add Participant</button>
-      <button onClick={() => getEventInformation('eventId123')}>Get Event Information</button>
     </div>
   );
 };
