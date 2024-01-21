@@ -42,7 +42,6 @@ const CreateEvent = () => {
           number: number,
           type: type,
           eventMaster: state.User.username,
-          transport: [transport]
         },
         userDetails: {
           username: state.User.username
@@ -54,13 +53,14 @@ const CreateEvent = () => {
 
 
   return (
-    <div>
+    <div style={{padding: '10rem'}}>
         <PlacesAutocomplete value={address} onChange={handleChange} onSelect={handleChange}>
           {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
             <div>
+              <h3 style={{color: 'black'}}><b><u>Enter your address: </u></b></h3>
               <input 
                 {...getInputProps({
-                  placeholder: "Enter address...",
+                  placeholder: "...",
                 })}
               />
               <div>
@@ -80,34 +80,21 @@ const CreateEvent = () => {
             </div>
           )}
         </PlacesAutocomplete>
-        {selectedLocation && (
-          <button className='button bg-secondary' onClick={confirmLocation}>
-            Confirm Location
-          </button>
-        )}
         <div>
-          <br/>
-          <br />
-          <div id="floating-panel">
-            <h3 style={{color: 'white'}}>Mode of Travel: </h3>
-            <select id="mode" onChange={changeMode}>
-              <option value="DRIVING">Driving</option>
-              <option value="WALKING">Walking</option>
-              <option value="TRANSIT">Bus</option>
-            </select>
-          </div>
         </div>
         <div>
           <br/>
           <br />
-          <input type="text" id="fname" placeholder="Enter Type of Event" name="fname" value={type} onChange={ev => setType(ev.target.value)}/>
+          <h3 style={{color: 'black'}}><b><u>Enter type of event: </u></b></h3>
+          <input type="text" id="fname" placeholder="ex. Restaurant" name="fname" value={type} onChange={ev => setType(ev.target.value)}/>
           <br/>
           <br />
-          <h3 style={{color: 'white'}}>Number of people: </h3>
+          <h3 style={{color: 'black'}}><b><u>Number of people: </u></b></h3>
           <input type="number" value={number} onChange={ev => setNumber(ev.target.value)}/>
           <br />
           <br />
-          <input type="text" id="fname" placeholder="Enter Name of Event" name="fname" value={name} onChange={ev => setName(ev.target.value)}/>
+          <h3 style={{color: 'black'}}><b><u>Enter name of event</u></b></h3>
+          <input type="text" id="fname" placeholder="ex. Adi's birthday" name="fname" value={name} onChange={ev => setName(ev.target.value)}/>
         </div>
 
         <button className='button bg-secondary' onClick={uploadData}>

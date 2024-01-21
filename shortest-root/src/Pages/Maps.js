@@ -169,7 +169,8 @@ const Maps = () => {
                             <button onClick={() => {
                                 console.log(option.name)
                             }}>{option.name} : 
-                            {option.starRating}
+
+                            {option.starRating!="Unkown" && (<p>{option.starRating}</p>)}
                                 </button>
                         </InfoWindow>
                     )}

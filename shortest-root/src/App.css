@@ -20,7 +20,7 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #000b35;
+  background-color: #dedfda;
   color: #333;
 }
 
@@ -206,8 +206,11 @@ img {
   border: none;
   cursor: pointer;
   margin-right: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
   transition: opacity 0.2s ease-in;
   outline: none;
+  display: block;
 }
 
 .btn-link {

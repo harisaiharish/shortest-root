@@ -15,8 +15,7 @@ const Login = ({res}) => {
         }, {
             eventName: "Watching movie",
             numPeople: 10
-        }],
-        comingEvents: [{
+        }, {
             eventName: "Date with girlfriend",
             numPeople: 2,
         }, {
@@ -32,9 +31,9 @@ const Login = ({res}) => {
 
 
   return (
-    <div>
+    <div className="mainContainer all-center">
         <div className='container'>
-            <h1>Login</h1>
+            <h1>Input</h1>
         </div>
         <div className='container'>
             <input 
