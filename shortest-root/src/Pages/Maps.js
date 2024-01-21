@@ -22,6 +22,7 @@ const Maps = () => {
     const [showAvg, setShow] = useState(false)
     const [avgLat, setAvgLat] = useState(0)
     const [avgLng, setAvgLng] = useState(0)
+    const [showOptions, setShowOptions] = useState(false)
 
     const arr = [
         {
@@ -74,7 +75,7 @@ const Maps = () => {
         let prom = getNearbyPlaces(apiKey,placeID,7000,"Restaurant")
         prom.then((resolvedArray) => {
             console.log(resolvedArray)
-
+            setShowOptions(true)
         })
         .catch((error) => {
             // Handle errors here
