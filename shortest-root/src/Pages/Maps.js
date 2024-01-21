@@ -153,9 +153,11 @@ const Maps = () => {
                     />
                 )}
                 {options.map(option => (
-                    <Marker key={option.name}  position={{lat: option.latitude, lng: option.longitude}} onClick={() => {
+                    <Marker position={{lat: option.latitude, lng: option.longitude}} onClick={() => {
                         setSelectedCenter(option)
                     }}>
+                    {selectedCenter && (
+
                         <InfoWindow
                         onCloseClick={() => {
                            setSelectedCenter(null);
@@ -170,6 +172,7 @@ const Maps = () => {
                             {option.starRating}
                                 </button>
                         </InfoWindow>
+                    )}
                     </Marker>
                 ))}
             </GoogleMap>
