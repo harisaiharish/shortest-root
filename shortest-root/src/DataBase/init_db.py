@@ -1,5 +1,5 @@
 import sqlite3
-import requests
+#import requests
 
 connection = sqlite3.connect('database.db')
 
