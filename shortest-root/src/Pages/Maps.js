@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, InfoWindow} from '@react-google-maps/api';
 import { useLocation } from 'react-router-dom';
 
 const Maps = () => {
@@ -23,6 +23,9 @@ const Maps = () => {
     const [avgLat, setAvgLat] = useState(0)
     const [avgLng, setAvgLng] = useState(0)
     const [showOptions, setShowOptions] = useState(false)
+    const [options, setOptions] = useState([])
+    const [selectedCenter, setSelectedCenter] = useState(null);
+
 
     const arr = [
         {
@@ -49,6 +52,7 @@ const Maps = () => {
         setAvgLat(sumLat/(arr.length))
         setAvgLng(sumLng/(arr.length))
         setShow(true)
+
     }
 
     function getPlaceID(apiKey, lat, lng) {
@@ -74,8 +78,11 @@ const Maps = () => {
       .then((placeID) => {
         let prom = getNearbyPlaces(apiKey,placeID,7000,"Restaurant")
         prom.then((resolvedArray) => {
-            console.log(resolvedArray)
-            setShowOptions(true)
+            if (!showOptions) {
+                setShowOptions(true)
+                setOptions(resolvedArray)
+            }
+            console.log(options)
         })
         .catch((error) => {
             // Handle errors here
@@ -101,18 +108,16 @@ const Maps = () => {
       
               placesService.nearbySearch(request, (results, nearbyStatus) => {
                 if (nearbyStatus === window.google.maps.places.PlacesServiceStatus.OK) {
-                  // Sort nearby places by prominence
-                  const sortedPlaces = results.sort((a, b) => b.prominence - a.prominence);
-      
-                  // Extract details including budget and star rating
-                  const sortedPlaceDetails = sortedPlaces.map(place => ({
+                  // Resolve the Promise with an array of objects containing place details
+                  const placeDetailsArray = results.map(place => ({
                     name: place.name,
                     budget: place.price_level || 'Unknown',
                     starRating: place.rating || 'Unknown',
+                    latitude: place.geometry.location.lat(),
+                    longitude: place.geometry.location.lng(),
                   }));
       
-                  // Resolve the Promise with sorted place details
-                  resolve(sortedPlaceDetails);
+                  resolve(placeDetailsArray);
                 } else {
                   reject(new Error(`Nearby search failed with status: ${nearbyStatus}`));
                 }
@@ -120,9 +125,9 @@ const Maps = () => {
             } else {
               reject(new Error(`Place details request failed with status: ${status}`));
             }
+          });
         });
-      });
-    }
+      }
 
     const customMarkerIcon = {
         path: 'M22-48h-44v43h16l6 5 6-5h16z',
@@ -147,6 +152,26 @@ const Maps = () => {
                         icon ={customMarkerIcon}
                     />
                 )}
+                {options.map(option => (
+                    <Marker key={option.name}  position={{lat: option.latitude, lng: option.longitude}} onClick={() => {
+                        setSelectedCenter(option)
+                    }}>
+                        <InfoWindow
+                        onCloseClick={() => {
+                           setSelectedCenter(null);
+                        }}
+                        position={{
+                           lat: option.latitude,
+                           lng: option.longitude
+                        }}>
+                            <button onClick={() => {
+                                console.log(option.name)
+                            }}>{option.name} : 
+                            {option.starRating}
+                                </button>
+                        </InfoWindow>
+                    </Marker>
+                ))}
             </GoogleMap>
         </div>
     )
