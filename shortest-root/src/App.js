@@ -20,7 +20,7 @@ export class App extends Component {
             <Route exact path='/users/:user' element={<User />}/>
             <Route exact path='/users/:user/events/create-event' element={<CreateEvent />}/>
             <Route exact path='/users/:user/events/:eventName' element={<Event />}/>
-            <Route exact path="/map" element={<Map />}/>
+            <Route exact path="/users/:user/events/:eventName/final-view" element={<Map />}/>
           </Routes>
         </div>
       </BrowserRouter>
