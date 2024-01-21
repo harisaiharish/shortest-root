@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, InfoWindow, DirectionsService, DirectionsRenderer } from '@react-google-maps/api';
+import { useLocation } from 'react-router-dom';
 
+const google = window.google
 const Maps = () => {
+
+    const {state} = useLocation();
 
     const mapContainerStyle = {
         width: '100vw',
@@ -14,24 +18,30 @@ const Maps = () => {
     //     libraries,
     //   });
 
-    const [lat, setLat] = useState(34.89)
-    const [lng, setLng] = useState(45.67)
+    const [lat, setLat] = useState(32.89)
+    const [lng, setLng] = useState(-122.67)
     const [showAvg, setShow] = useState(false)
     const [avgLat, setAvgLat] = useState(0)
     const [avgLng, setAvgLng] = useState(0)
+    const [showOptions, setShowOptions] = useState(false)
+    const [options, setOptions] = useState([])
+    const [selectedCenter, setSelectedCenter] = useState(null);
+    const [directionsRes, setDirectionsRes] = useState(false)
+    const [directionArr, setDirectionsArr] = useState([])
+
 
     const arr = [
         {
-            lat: 37.69,
-            lng: 238.27
+            lat: 13.69,
+            lng: 76.27
         },
         {
-            lat: 37.89,
-            lng: 238.67
+            lat: 12.89,
+            lng: 77.67
         },
         {
-            lat: 37.39,
-            lng: 239
+            lat: 14.39,
+            lng: 77
         }
     ]
 
@@ -45,6 +55,27 @@ const Maps = () => {
         setAvgLat(sumLat/(arr.length))
         setAvgLng(sumLng/(arr.length))
         setShow(true)
+
+    }
+
+    const displayRoute =  (props) => {
+        arr.forEach(async (element, i) => {
+            await calculateRoute(props, element)
+            console.log(directionArr[i]);
+        })  
+        setOptions([])
+    }
+
+    const calculateRoute = async (props, element) => {
+        const directionsService = new google.maps.DirectionsService()
+        const results = await directionsService.route({
+        origin: element,
+        destination: {lat: props.lat, lng: props.lng},
+        // eslint-disable-next-line no-undef
+        travelMode: google.maps.TravelMode.DRIVING,
+        })
+        setDirectionsRes(true)
+        directionArr.push(results)
     }
 
     function getPlaceID(apiKey, lat, lng) {
@@ -68,9 +99,19 @@ const Maps = () => {
       const apiKey = 'AIzaSyC-8yJHf4WGRxTvRDMaRtYos7wxkE6C86A';
       getPlaceID(apiKey, avgLat, avgLng)
       .then((placeID) => {
-        console.log(getNearbyPlaces(apiKey,placeID,7000,"Restaurant"))
+        let prom = getNearbyPlaces(apiKey,placeID,7000,"Restaurant")
+        prom.then((resolvedArray) => {
+            if (!showOptions) {
+                setShowOptions(true)
+                setOptions(resolvedArray)
+            }
+            
+        })
+        .catch((error) => {
+            // Handle errors here
+            console.error(error);
+          });
     })
-
     function getNearbyPlaces(apiKey, placeId, radius = 5000, keyword = null) {
         return new Promise((resolve, reject) => {
           const detailsService = new window.google.maps.places.PlacesService(document.createElement('div'));
@@ -89,18 +130,16 @@ const Maps = () => {
       
               placesService.nearbySearch(request, (results, nearbyStatus) => {
                 if (nearbyStatus === window.google.maps.places.PlacesServiceStatus.OK) {
-                  // Sort nearby places by prominence
-                  const sortedPlaces = results.sort((a, b) => b.prominence - a.prominence);
-      
-                  // Extract details including budget and star rating
-                  const sortedPlaceDetails = sortedPlaces.map(place => ({
+                  // Resolve the Promise with an array of objects containing place details
+                  const placeDetailsArray = results.map(place => ({
                     name: place.name,
                     budget: place.price_level || 'Unknown',
                     starRating: place.rating || 'Unknown',
+                    latitude: place.geometry.location.lat(),
+                    longitude: place.geometry.location.lng(),
                   }));
       
-                  // Resolve the Promise with sorted place details
-                  resolve(sortedPlaceDetails);
+                  resolve(placeDetailsArray);
                 } else {
                   reject(new Error(`Nearby search failed with status: ${nearbyStatus}`));
                 }
@@ -108,9 +147,9 @@ const Maps = () => {
             } else {
               reject(new Error(`Place details request failed with status: ${status}`));
             }
+          });
         });
-      });
-    }
+      }
 
     const customMarkerIcon = {
         path: 'M22-48h-44v43h16l6 5 6-5h16z',
@@ -125,7 +164,7 @@ const Maps = () => {
 
         <div>
             <button onClick={avgLocation} style={{width: "100px", height: "20px"}}></button>
-            <GoogleMap center={{lat: 37, lng: 238}} id='map' mapContainerStyle={mapContainerStyle} zoom={8}>
+            <GoogleMap center={{lat: 13, lng: 76}} id='map' mapContainerStyle={mapContainerStyle} zoom={8}>
                 {arr.map(element => (
                     <Marker position={{lat: element.lat, lng: element.lng}}/>
                 ))}
@@ -135,6 +174,36 @@ const Maps = () => {
                         icon ={customMarkerIcon}
                     />
                 )}
+                {directionsRes && (
+                    <div>
+                        {directionArr.map(element => (
+                            <DirectionsRenderer directions={element}/>
+                        ))}
+                    </div>
+                )}
+                {options.map(option => (
+                    <Marker position={{lat: option.latitude, lng: option.longitude}} onClick={() => {
+                        setSelectedCenter(option)
+                    }}>
+                    {selectedCenter && (
+
+                        <InfoWindow
+                        onCloseClick={() => {
+                           setSelectedCenter(null);
+                        }}
+                        position={{
+                           lat: option.latitude,
+                           lng: option.longitude
+                        }}>
+                            <button onClick={() => {
+                                displayRoute({lat: option.latitude, lng: option.longitude})
+                            }}>{option.name} : 
+                            {option.starRating}
+                                </button>
+                        </InfoWindow>
+                    )}
+                    </Marker>
+                ))}
             </GoogleMap>
         </div>
     )
