@@ -32,17 +32,26 @@ const Maps = () => {
 
     const arr = [
         {
-            lat: 13.69,
-            lng: 76.27
+            lat: 12.9177,
+            lng: 77.6580
+
         },
         {
-            lat: 12.89,
-            lng: 77.67
+            lat: 12.9235,
+            lng: 77.6851
         },
         {
-            lat: 14.39,
-            lng: 77
+            lat: 12.9052,
+            lng: 77.6865
+        },
+        {
+            lat:12.953,
+            lng: 77.6824
         }
+    ]
+
+    const names = [
+        'adi', 'vivin', 'aarya', 'hari'
     ]
 
     const avgLocation = () => {
@@ -61,7 +70,6 @@ const Maps = () => {
     const displayRoute =  (props) => {
         arr.forEach(async (element, i) => {
             await calculateRoute(props, element)
-            console.log(directionArr[i]);
         })  
         setOptions([])
     }
@@ -72,8 +80,9 @@ const Maps = () => {
         origin: element,
         destination: {lat: props.lat, lng: props.lng},
         // eslint-disable-next-line no-undef
-        travelMode: google.maps.TravelMode.DRIVING,
+        travelMode: google.maps.TravelMode.TRANSIT,
         })
+        console.log(results.routes[0].legs[0].duration.value);
         setDirectionsRes(true)
         directionArr.push(results)
     }
@@ -87,12 +96,9 @@ const Maps = () => {
             if (status === window.google.maps.GeocoderStatus.OK) {
               if (results[0]) {
                 resolve(results[0].place_id);
-              } else {
-                reject(new Error('No results found'));
+
               }
-            } else {
-              reject(new Error(`Geocoder failed with status: ${status}`));
-            }
+            } 
           });
         });
       }
@@ -140,13 +146,9 @@ const Maps = () => {
                   }));
       
                   resolve(placeDetailsArray);
-                } else {
-                  reject(new Error(`Nearby search failed with status: ${nearbyStatus}`));
-                }
+                } 
               });
-            } else {
-              reject(new Error(`Place details request failed with status: ${status}`));
-            }
+            } 
           });
         });
       }
@@ -163,14 +165,20 @@ const Maps = () => {
       return (
 
         <div>
-            <button onClick={avgLocation} style={{width: "100px", height: "20px"}}></button>
-            <GoogleMap center={{lat: 13, lng: 76}} id='map' mapContainerStyle={mapContainerStyle} zoom={8}>
+            <div className='all-center'>
+
+
+            <button onClick={avgLocation} style={{width: "200px", height: "27px", justifyContent: "center",
+  alignItems: "center", textAlign: "center"}}>Find Locations!</button>
+            </div>
+            <GoogleMap center={{lat: 12.9656, lng: 77.6062}} id='map' mapContainerStyle={mapContainerStyle} zoom={12}>
                 {arr.map(element => (
                     <Marker position={{lat: element.lat, lng: element.lng}}/>
                 ))}
                 {showAvg && (
                     <Marker 
                         position={{lat: avgLat, lng: avgLng}}
+                        
                         icon ={customMarkerIcon}
                     />
                 )}
@@ -205,6 +213,22 @@ const Maps = () => {
                     </Marker>
                 ))}
             </GoogleMap>
+            
+            {directionsRes && (
+                <div className='container bg-secondary grid-2 floatingBox'>
+                    <ul>
+                        {names.map(name => (
+                            <li>{name}</li>
+                        ))}
+                    </ul>
+                    <ul>
+                        {directionArr.map(element => (
+                            <li>{element.routes[0].legs[0].duration.text}</li>
+
+                        ))}
+                    </ul>
+                </div>
+            )}
         </div>
     )
 }
